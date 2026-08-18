@@ -1,0 +1,52 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Streamlit secrets - NEVER commit
+.streamlit/secrets.toml
+
+# Model files
+# NOTE: models/best.pt IS committed so the deployed app works out of the box.
+#       Replace it with your trained capsule model and commit the replacement.
+models/*.onnx
+models/*.engine
+models/yolov8n.pt
+yolov8n.pt
+trained_model.pt
+
+# Training artifacts
+runs/
+wandb/
+outputs/
+data/
+dataset/
+
+# Logs
+*.log
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Test artifacts
+.pytest_cache/
+.coverage
+htmlcov/
