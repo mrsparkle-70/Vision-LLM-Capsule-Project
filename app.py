@@ -134,9 +134,16 @@ def run_inspection(image: Image.Image) -> dict:
     sev = overall_severity(defect_detections)
     status = inspection_status(sev)
 
-    # Step 6: Generate LLM explanation
+    # Step 6: Generate LLM explanation (reads GROQ_API_KEY/GROQ_MODEL
+    # from Streamlit secrets or the GROQ_API_KEY environment variable)
     try:
-        explanation_text = generate_explanation(defect_detections)
+        groq_api_key = st.secrets.get("GROQ_API_KEY", "")
+        groq_model = st.secrets.get("GROQ_MODEL", None)
+        explanation_text = generate_explanation(
+            defect_detections,
+            api_key=groq_api_key or None,
+            model=groq_model,
+        )
         explanation = parse_explanation(explanation_text)
     except Exception:
         # Fallback to deterministic knowledge

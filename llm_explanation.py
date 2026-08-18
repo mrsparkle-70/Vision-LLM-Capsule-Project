@@ -264,13 +264,17 @@ def generate_fallback_explanation(detections: list) -> str:
 # Convenience Functions
 # ---------------------------------------------------------------------------
 
-def generate_explanation(detections: list, api_key: Optional[str] = None) -> str:
+def generate_explanation(
+    detections: list,
+    api_key: Optional[str] = None,
+    model: Optional[str] = None,
+) -> str:
     """
     Generate an explanation for detections using the LLM with fallback.
 
     This is the main entry point used by the application.
     """
-    client = GroqLLMClient(api_key=api_key)
+    client = GroqLLMClient(api_key=api_key, model=model or DEFAULT_MODEL)
     return client.generate(detections)
 
 
