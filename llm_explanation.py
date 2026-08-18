@@ -25,7 +25,7 @@ from defect_knowledge import (
 # Constants
 # ---------------------------------------------------------------------------
 
-DEFAULT_MODEL = "llama-3.1-8b-instant"
+DEFAULT_MODEL = "openai/gpt-oss-120b"
 DEFAULT_TEMPERATURE = 0.2
 DEFAULT_MAX_TOKENS = 500
 
@@ -190,6 +190,14 @@ class GroqLLMClient:
 
         try:
             client = self._get_client()
+
+            # Qwen3-style reasoning models emit a /thinking.../ trace in
+            # message.content unless reasoning_effort is explicitly "none".
+            # Disable it so parse_explanation() sees clean structured output.
+            completion_kwargs = {}
+            if self.model.lower().startswith("qwen"):
+                completion_kwargs["reasoning_effort"] = "none"
+
             prompt = build_prompt(detections)
 
             response = client.chat.completions.create(
@@ -200,6 +208,7 @@ class GroqLLMClient:
                 ],
                 temperature=self.temperature,
                 max_tokens=self.max_tokens,
+                **completion_kwargs,
             )
 
             text = response.choices[0].message.content.strip()
